@@ -1,22 +1,16 @@
 package com.example.android.recyclerview;
 
-import android.app.Application;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.text.Layout;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.android.recyclerview.GreenAdapter.ItemViewHolder;
-import java.util.List;
 
 class GreenAdapter extends RecyclerView.Adapter<ItemViewHolder>
 {
-    int m_nItemSize;
-
+    private   int m_nItemSize = 0;
+    private int m_iItemList = 0;
     public GreenAdapter(int nSize)
     {
         this.m_nItemSize = nSize;
@@ -34,12 +28,15 @@ class GreenAdapter extends RecyclerView.Adapter<ItemViewHolder>
 
         //instantiating ViewHolder
         ItemViewHolder viewHolder = new ItemViewHolder(itemListRoot);
+        viewHolder.itemView.setBackgroundColor(ColorUtils.getViewHolderBackgroundColorFromInstance(viewHolder.itemView.getContext(), m_iItemList));
+        viewHolder.itemIndexTextView.setText("ViewHolder index: " + m_iItemList++);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, final int position) {
-        holder.itemNumberTextView.setText(String.valueOf(position));
+        TextView itemNumberTextView = holder.itemNumberTextView;
+        itemNumberTextView.setText(String.valueOf(position));
     }
 
     @Override
@@ -50,10 +47,12 @@ class GreenAdapter extends RecyclerView.Adapter<ItemViewHolder>
     //caching view before binding.
     class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView itemNumberTextView;
+        TextView itemIndexTextView;
         // root view of the item in item.xml normally.
         public ItemViewHolder(final View itemView) {
             super(itemView);
             itemNumberTextView = (TextView) itemView.findViewById(R.id.tv_item_number);
+            itemIndexTextView =(TextView) itemView.findViewById(R.id.tv_item_index_number);
         }
     }
 }

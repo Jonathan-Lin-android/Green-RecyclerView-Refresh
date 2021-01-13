@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
      * References to RecyclerView and Adapter to reset the list to its
      * "pretty" state when the reset menu item is clicked.
      */
-    private Adapter mAdapter;
+    private GreenAdapter mAdapter;
     private RecyclerView mNumbersList;
 
     @Override
@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
          * There are other LayoutManagers available to display your data in uniform grids,
          * staggered grids, and more! See the developer documentation for more details.
          */
+        mAdapter = new GreenAdapter(NUM_LIST_ITEMS);
+        mNumbersList.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mNumbersList.setLayoutManager(layoutManager);
 
@@ -66,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         /*
          * The GreenAdapter is responsible for displaying each item in the list.
          */
-//        mAdapter = new Adapter(NUM_LIST_ITEMS);
-        GreenAdapter mAdapter = new GreenAdapter(NUM_LIST_ITEMS);
-        mNumbersList.setAdapter(mAdapter);
+
     }
 }

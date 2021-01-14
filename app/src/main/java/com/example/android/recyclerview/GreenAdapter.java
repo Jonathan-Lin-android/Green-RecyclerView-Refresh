@@ -7,9 +7,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.android.recyclerview.GreenAdapter.ItemViewHolder;
 
+//TODO: RESET MENU BUTTON
+
+//implement a toast msg when itemview is clicked
+// toast msg: item #3 clicked.
+// use interface onClick
+//implement interface ListItemClickListener
 class GreenAdapter extends RecyclerView.Adapter<ItemViewHolder>
 {
-    private   int m_nItemSize = 0;
+    private int m_nItemSize = 0;
     private int m_iItemList = 0;
     public GreenAdapter(int nSize)
     {

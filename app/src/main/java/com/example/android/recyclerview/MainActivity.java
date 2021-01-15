@@ -23,6 +23,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.example.android.recyclerview.GreenAdapter.ListItemClickListener;
+
 //implement a toast msg when itemview is clicked
 // toast msg: item #3 clicked.
 // use interface onClick
@@ -31,31 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int NUM_LIST_ITEMS = 100;
 
+
+    private GreenAdapter.ListItemClickListener mItemClickListener;
+
     /*
      * References to RecyclerView and Adapter to reset the list to its
      * "pretty" state when the reset menu item is clicked.
      */
     private GreenAdapter mAdapter;
+
     private RecyclerView mNumbersList;
-
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        final int ACTION_RESET_ID = R.id.action_reset;
-        switch(item.getItemId()) {
-            case ACTION_RESET_ID:
-                mAdapter = new GreenAdapter(NUM_LIST_ITEMS);
-                mNumbersList.setAdapter(mAdapter);
-                return true;
-        }
-        return false;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +56,20 @@ public class MainActivity extends AppCompatActivity {
          */
         mNumbersList = (RecyclerView) findViewById(R.id.rv_numbers);
 
+        // item click listener for when item veiws are clicked in the recycler
+        mItemClickListener = new ListItemClickListener() {
+            private Toast mToast = null;
+
+            @Override
+            public void onItemClick(final int itemPosition) {
+                if(mToast != null)
+                    mToast.cancel();
+                String str = getString(R.string.toast_message);
+                mToast = Toast.makeText(MainActivity.this, String.format(str, itemPosition), Toast.LENGTH_SHORT);
+                mToast.show();
+            }
+        };
+
         /*
          * A LinearLayoutManager is responsible for measuring and positioning item views within a
          * RecyclerView into a linear list. This means that it can produce either a horizontal or
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
          * There are other LayoutManagers available to display your data in uniform grids,
          * staggered grids, and more! See the developer documentation for more details.
          */
-        mAdapter = new GreenAdapter(NUM_LIST_ITEMS);
+        mAdapter = new GreenAdapter(NUM_LIST_ITEMS, mItemClickListener);
         mNumbersList.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mNumbersList.setLayoutManager(layoutManager);
@@ -94,5 +96,24 @@ public class MainActivity extends AppCompatActivity {
          * The GreenAdapter is responsible for displaying each item in the list.
          */
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int ACTION_RESET_ID = R.id.action_reset;
+        switch (item.getItemId()) {
+            case ACTION_RESET_ID:
+                mAdapter = new GreenAdapter(NUM_LIST_ITEMS, mItemClickListener);
+                mNumbersList.setAdapter(mAdapter);
+                return true;
+        }
+        return false;
     }
 }

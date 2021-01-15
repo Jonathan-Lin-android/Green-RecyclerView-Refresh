@@ -5,22 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.android.recyclerview.GreenAdapter.ItemViewHolder;
 
-//TODO: RESET MENU BUTTON
 
-//implement a toast msg when itemview is clicked
-// toast msg: item #3 clicked.
-// use interface onClick
-//implement interface ListItemClickListener
 class GreenAdapter extends RecyclerView.Adapter<ItemViewHolder>
 {
     private int m_nItemSize = 0;
     private int m_iItemList = 0;
-    public GreenAdapter(int nSize)
+
+    private final ListItemClickListener mListItemClickListener;
+
+    public GreenAdapter(int nSize, ListItemClickListener clickListener)
     {
         this.m_nItemSize = nSize;
+        mListItemClickListener = clickListener;
     }
+
     public void setDataSource(int nSize)
     {
         m_nItemSize = nSize;
@@ -51,7 +52,7 @@ class GreenAdapter extends RecyclerView.Adapter<ItemViewHolder>
     }
 
     //caching view before binding.
-    class ItemViewHolder extends RecyclerView.ViewHolder {
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView itemNumberTextView;
         TextView itemIndexTextView;
         // root view of the item in item.xml normally.
@@ -59,6 +60,17 @@ class GreenAdapter extends RecyclerView.Adapter<ItemViewHolder>
             super(itemView);
             itemNumberTextView = (TextView) itemView.findViewById(R.id.tv_item_number);
             itemIndexTextView =(TextView) itemView.findViewById(R.id.tv_item_index_number);
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(final View v) {
+            mListItemClickListener.onItemClick(getAdapterPosition());
+        }
+    }
+
+    interface  ListItemClickListener {
+        public void onItemClick(int itemPosition);
     }
 }
